@@ -1,7 +1,9 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { Sidebar } from "../../components/common/SideBar/Sidebar";
 import styled from "styled-components";
+import { socket } from "../../socket";
+import { useQueryClient } from "@tanstack/react-query";
 
 const StyledPageWrapper = styled("div")`
   overflow: auto;
@@ -29,6 +31,21 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const onProcedureUpdated = (id: string) => {
+      queryClient.invalidateQueries(["procedures"]);
+      queryClient.invalidateQueries(["procedure", id]);
+    };
+
+    socket.on("procedure updated", onProcedureUpdated);
+
+    return () => {
+      socket.off("procedure updated", onProcedureUpdated);
+    };
+  }, [queryClient]);
+
   return (
     <StyledPageWrapper>
       <Sidebar />

@@ -4,6 +4,8 @@ import { UseFormRegister } from "react-hook-form/dist/types/form";
 import { PreformProcedureForm } from "./PreformProcedure";
 import { FormEvent } from "react";
 import styled from "styled-components";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 const StyledHeader = styled.div`
   display: flex;
@@ -22,7 +24,20 @@ export const PreformProcedureAddGood = ({
   loading?: boolean;
   errors?: any;
 }) => {
-  console.log("ERRORS", errors);
+  const { data } = useQuery({
+    queryKey: ["goods"],
+    queryFn: async () => {
+      const resp = await axios.get("http://localhost:4000/procedure/good/all");
+      return resp.data;
+    },
+    select: (data) => {
+      return data.map((d: any) => ({
+        id: d.id,
+        label: d.name,
+      }));
+    },
+  });
+
   return (
     <form onSubmit={onSubmit}>
       <StyledHeader>
@@ -32,8 +47,7 @@ export const PreformProcedureAddGood = ({
           {...register("good", {
             required: { value: true, message: "Required field" },
           })}
-          options={[{ id: "1", label: "Medication" }]}
-          defaultOption={{ id: "1", label: "Medication" }}
+          options={data ?? []}
           state={errors?.good?.message && "Error"}
           helperText={errors?.good?.message}
         />

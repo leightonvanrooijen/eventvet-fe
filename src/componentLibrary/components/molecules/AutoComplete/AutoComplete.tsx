@@ -71,7 +71,9 @@ export const AutoComplete = React.forwardRef<
     },
     ref
   ) => {
-    const [filteredOptions, setFilteredOptions] = useState(options);
+    const [filteredOptions, setFilteredOptions] = useState<Option[]>(
+      defaultOption ? [defaultOption] : []
+    );
     const [selected, setSelected] = useState<Option | undefined>(defaultOption);
     const [inputValue, setInputValue] = useState<string | undefined>("");
     const { reference, floating, open, setOpen } =
@@ -86,6 +88,11 @@ export const AutoComplete = React.forwardRef<
           target: { value: selected, name: "good" },
         });
     }, [selected]);
+
+    // update options array if the input changes
+    useEffect(() => {
+      setFilteredOptions(options);
+    }, [options]);
 
     return (
       <StyledDiv>
@@ -128,7 +135,12 @@ export const AutoComplete = React.forwardRef<
             setFilteredOptions(options);
           }}
         />
-        <Menu isOpen={open} strategy={"absolute"} ref={floating}>
+        <Menu
+          isOpen={open}
+          strategy={"absolute"}
+          ref={floating}
+          height={"400px"}
+        >
           <MenuOptions
             options={filteredOptions}
             setSelected={(value) => {

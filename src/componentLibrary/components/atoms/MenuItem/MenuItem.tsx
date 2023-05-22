@@ -25,6 +25,7 @@ export const StyledRightIcon = styled("div")`
 export const StyledMenuItem = styled("button")<{ size: ButtonSizes }>`
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   box-sizing: border-box;
 
   width: 100%;
@@ -99,6 +100,7 @@ export const MenuItem = ({
             display: "flex",
             flex: 1,
             alignItems: "start",
+            textAlign: "left",
             flexDirection: "column",
           }}
         >

@@ -17,8 +17,10 @@ const Template: ComponentStory<typeof Menu> = (args) => {
   }
 
   return (
-    <Menu isOpen={true} strategy={"absolute"} width={"150px"} ref={ref}>
-      <MenuItem onClick={() => undefined}>Item 1</MenuItem>
+    <Menu isOpen={true} strategy={"absolute"} width={"200px"} ref={ref}>
+      <MenuItem onClick={() => undefined}>
+        Item 1 cslknc mcdnkdcn ksxmln
+      </MenuItem>
       <MenuItem onClick={() => undefined}>Item 2</MenuItem>
     </Menu>
   );
