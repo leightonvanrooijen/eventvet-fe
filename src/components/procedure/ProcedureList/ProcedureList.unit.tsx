@@ -26,7 +26,7 @@ afterAll(() => server.close());
 
 const setUp = (setId = jest.fn()) => {
   return render(
-    <MockProvider withQuery>
+    <MockProvider withQuery withTheme>
       <ProcedureList setId={setId} />
     </MockProvider>
   );

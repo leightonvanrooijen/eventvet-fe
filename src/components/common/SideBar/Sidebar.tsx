@@ -1,11 +1,31 @@
 "use client";
+import React from "react";
+import styled from "styled-components";
+import { MenuItem } from "../../../componentLibrary/components/atoms/MenuItem/MenuItem";
+import { Typography } from "../../../componentLibrary/components/atoms/Text/Typography";
+import Link from "next/link";
 
-import { ReactNode } from "react";
+export const StyledSidebar = styled("div")`
+  height: 100%;
+  width: 200px;
+  border-radius: 0.25rem;
 
-export const Sidebar = ({ children }: { children: ReactNode }) => {
+  background-color: ${({ theme }) => theme.color.menuFill};
+  box-shadow: ${({ theme }) => theme.lighting.sideBarShadow};
+`;
+
+export const Sidebar = () => {
   return (
-    <div className="bg-white h-full shadow-xl outline-2 outline-black flex flex-col">
-      {children}
-    </div>
+    <StyledSidebar>
+      <div style={{ padding: "1rem 0.625rem 0.5rem 0.625rem" }}>
+        <Typography variant={"headingMedium"}>Procedure</Typography>
+      </div>
+      <Link href={"/procedure/create"}>
+        <MenuItem>Create</MenuItem>
+      </Link>
+      <Link href={"/procedure"}>
+        <MenuItem>Preform</MenuItem>
+      </Link>
+    </StyledSidebar>
   );
 };

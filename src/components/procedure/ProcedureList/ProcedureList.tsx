@@ -1,38 +1,65 @@
-import { List } from "../../common/List/List";
-import { ListItem } from "../../common/ListItem/LIstItem";
 import React, { useEffect } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { fetchAllProcedures } from "../../../api/fetchAllProcedures";
 import { STATUS_MAP } from "../PreformProcedure/PreformProcedure";
+import styled, { css } from "styled-components";
+import { ListItem } from "../../../componentLibrary/components/atoms/ListItem/ListItem";
+import { List } from "../../../componentLibrary/components/molecules/List/List";
+import { Typography } from "../../../componentLibrary/components/atoms/Text/Typography";
+
+export const StyledProcedureListContainer = styled("div")`
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+`;
+
+const Heading = styled("div")`
+  padding: 0 0.25rem 0.5rem;
+`;
 
 export const ProcedureList = ({ setId }: { setId: React.Dispatch<string> }) => {
+  const [firstLoadComplete, setFirstLoadComplete] =
+    React.useState<boolean>(false);
+
   const { data, error, isInitialLoading } = useQuery({
     queryKey: ["procedures"],
     queryFn: fetchAllProcedures,
-    select: (data): { id: string; text: string; secondaryText: string }[] =>
+    select: (data): { value: string; text: string; secondaryText: string }[] =>
       data?.map((procedure) => ({
-        id: procedure.id,
+        value: procedure.id,
         text: procedure.name,
         secondaryText: STATUS_MAP[procedure.status],
       })),
   });
 
+  // select the first item in the list on first load
+  useEffect(() => {
+    if (data && data?.length > 0 && !firstLoadComplete) {
+      setId(data[0].value);
+      setFirstLoadComplete(true);
+    }
+  }, [data, setId, firstLoadComplete]);
+
   return (
-    <div className="flex-col flex min-h-0">
-      <div className="py-1 pl-2.5 bg-white">
-        <p className="font-bold text-2xl">Procedures</p>
-      </div>
+    <StyledProcedureListContainer>
+      <Heading>
+        <Typography variant={"headingSmall"}>Procedures</Typography>
+      </Heading>
       <List loading={isInitialLoading}>
         {data &&
-          data.map((item) => (
+          data.map((procedure, i) => (
             <ListItem
-              key={item.id}
-              text={item.text}
-              secondaryText={item.secondaryText}
-              onClick={() => setId(item.id)}
-            />
+              onClick={() => setId(procedure.value)}
+              key={procedure.value + i}
+              secondaryText={procedure.secondaryText}
+            >
+              {procedure.text}
+            </ListItem>
           ))}
       </List>
-    </div>
+    </StyledProcedureListContainer>
   );
 };

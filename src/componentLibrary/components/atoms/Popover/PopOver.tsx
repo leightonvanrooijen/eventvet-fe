@@ -1,21 +1,20 @@
-import styled from "styled-components"
-import React, { forwardRef, ReactNode } from "react"
+import styled from "styled-components";
+import React, { forwardRef, ReactNode } from "react";
 
 export type PopOverProps = {
-  isOpen: boolean
-  width?: string
-  strategy: "absolute" | "fixed"
-  children?: ReactNode
-}
+  isOpen: boolean;
+  width?: string;
+  strategy: "absolute" | "fixed";
+  children?: ReactNode;
+};
 
 export const StyledPopOver = styled("div")<Partial<PopOverProps>>`
   display: ${({ isOpen }) => (isOpen ? "block" : "none")};
   position: ${({ strategy }) => (strategy ? strategy : "fixed")};
+  z-index: 10;
 
   width: ${({ width }) => width};
-
-  box-sizing: border-box;
-`
+`;
 
 export const PopOver = forwardRef<HTMLDivElement, PopOverProps>(
   ({ width, strategy, children, isOpen }: PopOverProps, ref) => {
@@ -26,13 +25,13 @@ export const PopOver = forwardRef<HTMLDivElement, PopOverProps>(
           isOpen={isOpen}
           width={width}
           onMouseDown={(event) => {
-            event.preventDefault()
+            event.preventDefault();
           }}
         >
           {children}
         </StyledPopOver>
-      )
+      );
     }
-    return null
-  },
-)
+    return null;
+  }
+);

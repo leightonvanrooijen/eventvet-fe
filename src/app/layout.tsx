@@ -1,8 +1,8 @@
 import "./globals.css";
-import { List } from "../components/common/List/List";
-import { ListItem } from "../components/common/ListItem/LIstItem";
-import { Sidebar } from "../components/common/SideBar/Sidebar";
 import React from "react";
+import StyledComponentsRegistry from "../lib/registry";
+import { ContextProvider } from "./context";
+import { AppHeader } from "../components/common/Heading/AppHeader";
 
 export const metadata = {
   title: "Create Next App",
@@ -18,18 +18,21 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <main>
-          <div className="h-screen flex bg-gray-200">
-            <Sidebar>
-              <div className="pt-3 pb-1 pl-2.5 w-52">
-                <p className="font-bold text-2xl">Event Vet</p>
+          <ContextProvider>
+            <StyledComponentsRegistry>
+              <div
+                style={{
+                  height: "100vh",
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <AppHeader />
+                {children}
               </div>
-              <List>
-                <ListItem text={"Procedure"} />
-                <ListItem text={"Invoice"} />
-              </List>
-            </Sidebar>
-            {children}
-          </div>
+            </StyledComponentsRegistry>
+          </ContextProvider>
         </main>
       </body>
     </html>

@@ -1,5 +1,5 @@
-import styled from "styled-components"
-import { MouseEventHandler, ReactNode } from "react"
+import styled from "styled-components";
+import { MouseEventHandler, ReactNode } from "react";
 
 export const StyledIconButton = styled("button")`
   display: flex;
@@ -19,17 +19,31 @@ export const StyledIconButton = styled("button")`
   :hover {
     background-color: ${({ theme }) => `${theme.color.iconButtonText}10`};
   }
-`
+`;
 
 export type IconButtonProps = {
-  children: ReactNode
-  onClick: MouseEventHandler<HTMLButtonElement>
-}
+  children: ReactNode;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+  color?: string;
+  dataTestId?: string;
+};
 
-export const IconButton = ({ children, onClick }: IconButtonProps) => {
+export const IconButton = ({
+  children,
+  onClick,
+  color,
+  dataTestId,
+}: IconButtonProps) => {
   return (
-    <StyledIconButton color={"#FF0000"} onClick={onClick}>
+    <StyledIconButton
+      color={color}
+      onClick={(e) => {
+        e.preventDefault();
+        onClick && onClick(e);
+      }}
+      data-testid={dataTestId}
+    >
       {children}
     </StyledIconButton>
-  )
-}
+  );
+};
